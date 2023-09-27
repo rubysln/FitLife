@@ -1,0 +1,134 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1695816074000-1
+      author: shtig (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_healthdata
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: heart_rate
+                  type: INT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: blood_sugar_level
+                  type: FLOAT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: blood_pressure
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: user_id_id
+                  type: BIGINT
+            tableName: health_data
+  - changeSet:
+      id: 1695816074000-2
+      author: shtig (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_physicalactivitydata
+                  name: data_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: steps
+                  type: INT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: distance
+                  type: FLOAT
+              - column:
+                  name: workout_time
+                  type: TIME
+              - column:
+                  constraints:
+                    nullable: false
+                  name: calories_burned
+                  type: FLOAT
+              - column:
+                  name: user_id_id
+                  type: BIGINT
+            tableName: physical_activity_data
+  - changeSet:
+      id: 1695816074000-3
+      author: shtig (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_userprofile
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: username
+                  type: VARCHAR(30)
+              - column:
+                  name: password_hash
+                  type: VARCHAR(32)
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: height
+                  type: FLOAT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: weight
+                  type: FLOAT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: date
+                  type: VARCHAR(255)
+            tableName: user_profile
+  - changeSet:
+      id: 1695816074000-4
+      author: shtig (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id_id
+            baseTableName: health_data
+            constraintName: FK_HEALTHDATA_ON_USERID
+            referencedColumnNames: id
+            referencedTableName: user_profile
+  - changeSet:
+      id: 1695816074000-5
+      author: shtig (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id_id
+            baseTableName: physical_activity_data
+            constraintName: FK_PHYSICALACTIVITYDATA_ON_USERID
+            referencedColumnNames: id
+            referencedTableName: user_profile
