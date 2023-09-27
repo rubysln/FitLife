@@ -1,13 +1,17 @@
 package ru.fit.fitlyfe.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.util.List;
 import lombok.Data;
 
 @Data
@@ -16,7 +20,7 @@ public class UserProfile {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long user_id;
 
 	@Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
 	@NotEmpty(message = "Name should not be empty")
@@ -37,5 +41,9 @@ public class UserProfile {
 
 	@NotNull
 	private String date;
+
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user_id")
+	private List<HealthData> healthDataList;
 }
 

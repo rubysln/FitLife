@@ -10,37 +10,39 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.fit.fitlyfe.models.UserProfile;
 import ru.fit.fitlyfe.repository.UserRepository;
 
 @CrossOrigin(origins = "*", maxAge = 4800)
 @RestController
+@RequestMapping("/api/users")
 public class UserController {
 	@Autowired
 	private UserRepository repository;
 
-	@GetMapping("/users/{id}")
+	@GetMapping(value = "/{id}")
 	Optional<UserProfile> getUser(@PathVariable("id") long id){
 		return repository.findById(id);
 	}
 
-	@GetMapping("/users")
+	@GetMapping(value = "/")
 	List<UserProfile> getUsers(){
 		return repository.findAll();
 	}
 
-	@PostMapping("/users")
+	@PostMapping("/")
 	UserProfile createUser(@RequestBody UserProfile userProfile){
 		return repository.save(userProfile);
 	}
 
-	@DeleteMapping("/users/{id}")
+	@DeleteMapping("/{id}")
 	void deleteUser(@PathVariable("id") long id){
 		repository.deleteById(id);
 	}
 
-	@PatchMapping("/users/{id}")
+	@PatchMapping("/{id}")
 	Optional<UserProfile> patchUser(@PathVariable("id") long id, @RequestBody UserProfile userProfile){
 		return repository.findById(id)
 				.map(user -> {
@@ -52,5 +54,9 @@ public class UserController {
 					user.setWeight(userProfile.getWeight());
 					return repository.save(user);
 				});
+	}
+
+	public UserRepository getRepository(){
+		return repository;
 	}
 }

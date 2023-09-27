@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 import ru.fit.fitlyfe.models.UserProfile;
 
 @Repository
-@Component
 public interface UserRepository extends JpaRepository<UserProfile, Long> {
 
 }

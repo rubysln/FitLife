@@ -1,0 +1,4 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/2023/09/init-jpa-entities.yaml
+
