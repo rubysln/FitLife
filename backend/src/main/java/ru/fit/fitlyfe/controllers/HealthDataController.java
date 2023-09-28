@@ -1,8 +1,16 @@
 package ru.fit.fitlyfe.controllers;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -12,74 +20,72 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.fit.fitlyfe.models.HealthData;
-import ru.fit.fitlyfe.models.UserProfile;
-import ru.fit.fitlyfe.repository.HealthDataRepository;
-import ru.fit.fitlyfe.repository.UserRepository;
+import ru.fit.fitlyfe.services.impl.HealthDataServiceImpl;
 
 @RestController
 @RequestMapping("/api/health")
 public class HealthDataController {
-
 	@Autowired
-	private HealthDataRepository repository;
+	private HealthDataServiceImpl healthDataService;
 
-	@Autowired
-	private UserRepository userRepository;
+	@GetMapping("/{userId}")
+	CollectionModel<EntityModel<HealthData>> getHealths(@PathVariable("userId") long userId){
+		var healthsDataList =  healthDataService.getAllHealth(userId);
+		if(healthsDataList == null) return null;
+		List<EntityModel<HealthData>> healthModels = healthsDataList.stream()
+				.map(healthData -> EntityModel.of(healthData,
+						linkTo(methodOn(HealthDataController.class)
+								.getHealth(userId, healthData.getId()))
+								.withSelfRel()))
+				.collect(Collectors.toList());
 
-	@GetMapping(value = "/{userId}")
-	List<HealthData> getHealths(@PathVariable("userId") long id) {
-		Optional<UserProfile> userOptional = userRepository.findById(id);
-		if (userOptional.isPresent()) {
-			var user = userOptional.get();
+		Link collectionLink = linkTo(methodOn(HealthDataController.class)
+				.getHealths(userId))
+				.withSelfRel();
 
-			if (!user.getHealthDataList().isEmpty()) {
-				return user.getHealthDataList();
-			} else {
-				return null;
-			}
-		}
-		else return null;
+		return CollectionModel.of(healthModels, collectionLink);
 	}
 
-	@GetMapping(value = "/{userId}/{healthId}")
-	Optional<HealthData> getHealth(@PathVariable("userId") long userId, @PathVariable("healthId") long healthId){
-		var userOptional = userRepository.findById(userId);
-		var healthOptional = repository.findById(healthId);
-
-		if(userOptional.isPresent() && healthOptional.isPresent()){
-			var user = userOptional.get();
-			var health = healthOptional.get();
-			if(user.getHealthDataList().contains(health)) return healthOptional;
-			else return Optional.empty();
-		}
-		else return Optional.empty();
+	@GetMapping("/{userId}/{healthId}")
+	EntityModel<Optional<HealthData>> getHealth(@PathVariable("userId") long userId,
+			@PathVariable("healthId") long healthId){
+		var healthData = healthDataService.getOneHealth(userId, healthId);
+		Link selfLink = linkTo(methodOn(HealthDataController.class)
+				.getHealth(userId, healthId))
+				.withSelfRel();
+		return EntityModel.of(healthData, selfLink);
 	}
 
-	@PostMapping(value = "/{userId}")
-	HealthData createHealth(@PathVariable("userId") long userId, @RequestBody HealthData healthData){
-		var userOptional = userRepository.findById(userId);
+	@PostMapping("/{userId}")
+	EntityModel<HealthData> createHealth(@RequestBody HealthData healthData,
+			@PathVariable("userId") long userId){
+		var health =  healthDataService.createHealth(healthData, userId);
 
-		if(userOptional.isPresent()){
-			healthData.setUser_id(userOptional.get());
-			return repository.save(healthData);
-		}
-		else return null;
+		Link selfLink = linkTo(methodOn(HealthDataController.class)
+				.getHealth(userId, health.getId()))
+				.withSelfRel();
+
+		return EntityModel.of(health, selfLink);
 	}
 
-	@DeleteMapping(value = "/{healthId}")
-	void deleteHealth(@PathVariable("healthId") long healthId){
-		repository.deleteById(healthId);
+	@PatchMapping("/{userId}/{healthId}")
+	EntityModel<Optional<HealthData>> patchHealth(@PathVariable("userId") long userId,
+			@PathVariable("healthId") long healthId,
+			@RequestBody HealthData healthData){
+		var health =  healthDataService.patchHealth(healthData, healthId);
+
+		Link selfLink = linkTo(methodOn(HealthDataController.class)
+				.getHealth(userId, healthId))
+				.withSelfRel();
+
+		return EntityModel.of(health, selfLink);
 	}
 
-	@PatchMapping(value = "/{healthId}")
-	Optional<HealthData> patchHealth(@PathVariable("healthId") long healthId, @RequestBody HealthData health){
-		return repository.findById(healthId)
-				.map(healthData -> {
-					healthData.setUser_id(health.getUser_id());
-					healthData.setBloodPressure(health.getBloodPressure());
-					healthData.setHeartRate(health.getHeartRate());
-					healthData.setBloodSugarLevel(health.getBloodSugarLevel());
-					return repository.save(healthData);
-				});
+	@DeleteMapping("/{healthId}")
+	ResponseEntity<Object> deleteHealth(@PathVariable("healthId") long healthId){
+		healthDataService.deleteHealth(healthId);
+
+		return ResponseEntity.noContent().build();
 	}
 }
+
