@@ -1,49 +1,63 @@
 package ru.fit.fitlyfe.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
 import java.util.List;
+
 import lombok.Data;
+
+import static org.hibernate.cfg.AvailableSettings.USER;
 
 @Data
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Table(name = "user_profile")
 public class UserProfile {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long user_id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long user_id;
 
-	@Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
-	@NotEmpty(message = "Name should not be empty")
-	private String username;
+    @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
+    @NotEmpty(message = "Name should not be empty")
+    @Column(name = "user_name")
+    private String username;
 
-	@Size(min = 6, max = 32, message = "Password should be between 6 and 32 characters")
-	private String password_hash;
+    @Size(min = 6, max = 32, message = "Password should be between 6 and 32 characters")
+    @Column(name = "password_hash")
+    private String password_hash;
 
-	@Email
-	@NotEmpty
-	private String email;
+    @Email
+    @NotEmpty
+    @Column(name = "email")
+    private String email;
 
-	@NotNull
-	private float height;
+    @NotNull
+    @Column(name = "height")
+    private float height;
 
-	@NotNull
-	private float weight;
+    @NotNull
+    @Column(name = "weight")
+    private float weight;
 
-	@NotNull
-	private String date;
+    @NotNull
+    @Column(name = "date")
+    private String date;
 
-	@JsonIgnore
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user_id")
-	private List<HealthData> healthDataList;
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userProfile", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HealthData> healthDataList;
+
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userProfile", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PhysicalActivityData> physicalActivityDataList;
+
 }
 

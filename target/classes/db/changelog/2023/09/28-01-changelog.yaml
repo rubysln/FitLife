@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 1695816074000-1
+      id: 1695860322061-1
       author: shtig (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -11,18 +11,16 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     primaryKey: true
-                    primaryKeyName: pk_healthdata
+                    primaryKeyName: pk_health_data
                   name: id
                   type: BIGINT
               - column:
-                  constraints:
-                    nullable: false
                   name: heart_rate
                   type: INT
               - column:
                   constraints:
                     nullable: false
-                  name: blood_sugar_level
+                  name: blood_sugar_lvl
                   type: FLOAT
               - column:
                   constraints:
@@ -32,20 +30,22 @@ databaseChangeLog:
               - column:
                   constraints:
                     nullable: false
-                  name: user_id_id
+                  name: user_profile_id
                   type: BIGINT
             tableName: health_data
   - changeSet:
-      id: 1695816074000-2
+      id: 1695860322061-2
       author: shtig (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - createTable:
             columns:
               - column:
+                  autoIncrement: true
                   constraints:
+                    nullable: false
                     primaryKey: true
-                    primaryKeyName: pk_physicalactivitydata
+                    primaryKeyName: pk_physical_activity
                   name: data_id
                   type: BIGINT
               - column:
@@ -59,19 +59,23 @@ databaseChangeLog:
                   name: distance
                   type: FLOAT
               - column:
+                  constraints:
+                    nullable: false
                   name: workout_time
-                  type: TIME
+                  type: VARCHAR(255)
               - column:
                   constraints:
                     nullable: false
                   name: calories_burned
                   type: FLOAT
               - column:
-                  name: user_id_id
+                  constraints:
+                    nullable: false
+                  name: user_profile_id
                   type: BIGINT
-            tableName: physical_activity_data
+            tableName: physical_activity
   - changeSet:
-      id: 1695816074000-3
+      id: 1695860322061-3
       author: shtig (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -82,11 +86,11 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     primaryKey: true
-                    primaryKeyName: pk_userprofile
+                    primaryKeyName: pk_user_profile
                   name: id
                   type: BIGINT
               - column:
-                  name: username
+                  name: user_name
                   type: VARCHAR(30)
               - column:
                   name: password_hash
@@ -111,24 +115,25 @@ databaseChangeLog:
                   type: VARCHAR(255)
             tableName: user_profile
   - changeSet:
-      id: 1695816074000-4
+      id: 1695860322061-4
       author: shtig (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
-            baseColumnNames: user_id_id
+            baseColumnNames: user_profile_id
             baseTableName: health_data
-            constraintName: FK_HEALTHDATA_ON_USERID
+            constraintName: FK_HEALTH_DATA_ON_USER_PROFILE
             referencedColumnNames: id
             referencedTableName: user_profile
   - changeSet:
-      id: 1695816074000-5
+      id: 1695860322061-5
       author: shtig (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
-            baseColumnNames: user_id_id
-            baseTableName: physical_activity_data
-            constraintName: FK_PHYSICALACTIVITYDATA_ON_USERID
+            baseColumnNames: user_profile_id
+            baseTableName: physical_activity
+            constraintName: FK_PHYSICAL_ACTIVITY_ON_USER_PROFILE
             referencedColumnNames: id
             referencedTableName: user_profile
+

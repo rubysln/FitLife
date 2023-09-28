@@ -14,21 +14,21 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.fit.fitlyfe.models.HealthData;
 import ru.fit.fitlyfe.models.UserProfile;
 import ru.fit.fitlyfe.repository.HealthDataRepository;
-import ru.fit.fitlyfe.repository.UserRepository;
+import ru.fit.fitlyfe.repository.UserProfileRepository;
+import ru.fit.fitlyfe.services.impl.HealthDataServiceImpl;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/health")// ДОДЕЛАТЬ =) ДЕЛИГИРОВАНИЕ КОДА ЭТО ХОРОШО, работать напрямую с Repository = плохо, нужна абстракция в виде сервисов ^_^
 public class HealthDataController {
-
 	@Autowired
-	private HealthDataRepository repository;
-
-	@Autowired
-	private UserRepository userRepository;
-
-	@GetMapping(value = "/health/{userId}")
+	private HealthDataServiceImpl healthDataService;
+	@GetMapping("/{userId}")
+	List<HealthData> getAllHealth(@PathVariable Long userId) {
+		return healthDataService.getAllHealth(userId);
+	}
+	/*@GetMapping("/{userId}")
 	List<HealthData> getHealths(@PathVariable("userId") long id) {
-		Optional<UserProfile> userOptional = userRepository.findById(id);
+		Optional<UserProfile> userOptional = userProfileRepository.findById(id);
 		if (userOptional.isPresent()) {
 			var user = userOptional.get();
 
@@ -39,12 +39,17 @@ public class HealthDataController {
 			}
 		}
 		else return null;
-	}
+	}*/
 
-	@GetMapping(value = "/health/{userId}/{healthId}")
-	Optional<HealthData> getHealth(@PathVariable("userId") long userId, @PathVariable("healthId") long healthId){
-		var userOptional = userRepository.findById(userId);
-		var healthOptional = repository.findById(healthId);
+
+	@GetMapping("/{userId}/{healthId}")
+	Optional<HealthData> getOneHealth(@PathVariable Long userId, @PathVariable Long healthId){
+		return healthDataService.getOneHealth(userId, healthId);
+	}
+	/*@GetMapping("/{userId}/{healthId}")
+	Optional<HealthData> getOneHealth(@PathVariable("userId") long userId, @PathVariable("healthId") long healthId){
+		var userOptional = userProfileRepository.findById(userId);
+		var healthOptional = healthDataRepository.findById(healthId);
 
 		if(userOptional.isPresent() && healthOptional.isPresent()){
 			var user = userOptional.get();
@@ -53,33 +58,48 @@ public class HealthDataController {
 			else return Optional.empty();
 		}
 		else return Optional.empty();
-	}
+	}*/
 
-	@PostMapping(value = "/health/{userId}")
+	@PostMapping("/{userId}")
+	HealthData createHealth(@RequestBody HealthData healthData, @PathVariable Long userId){
+		return healthDataService.createHealth(healthData, userId);
+	}
+	/*@PostMapping("/{userId}")
 	HealthData createHealth(@PathVariable("userId") long userId, @RequestBody HealthData healthData){
-		var userOptional = userRepository.findById(userId);
+		var userOptional = userProfileRepository.findById(userId);
 
 		if(userOptional.isPresent()){
-			healthData.setUser_id(userOptional.get());
-			return repository.save(healthData);
+			healthData.setUserProfile(userOptional.get());
+			return healthDataRepository.save(healthData);
 		}
 		else return null;
+	}*/
+
+
+	@PatchMapping( "/{healthId}")
+	Optional<HealthData> patchHealth(@RequestBody HealthData healthData, @PathVariable Long healthId){
+		return healthDataService.patchHealth(healthData, healthId);
 	}
 
-	@DeleteMapping(value = "/health/{healthId}")
-	void deleteHealth(@PathVariable("healthId") long healthId){
-		repository.deleteById(healthId);
-	}
-
-	@PatchMapping(value = "/health/{healthId}")
+	/*@PatchMapping( "/{healthId}")
 	Optional<HealthData> patchHealth(@PathVariable("healthId") long healthId, @RequestBody HealthData health){
-		return repository.findById(healthId)
+		return healthDataRepository.findById(healthId)
 				.map(healthData -> {
-					healthData.setUser_id(health.getUser_id());
+					healthData.setUserProfile(health.getUserProfile());
 					healthData.setBloodPressure(health.getBloodPressure());
 					healthData.setHeartRate(health.getHeartRate());
 					healthData.setBloodSugarLevel(health.getBloodSugarLevel());
-					return repository.save(healthData);
+					return healthDataRepository.save(healthData);
 				});
-	}
+	}*/
+
+
+	@DeleteMapping("/{healthId}")
+	void deleteHealth(@PathVariable Long healthId){
+        healthDataService.deleteHealth(healthId);
+    }
+	/*@DeleteMapping("/{healthId}")
+	void deleteHealth(@PathVariable("healthId") long healthId){
+		healthDataRepository.deleteById(healthId);
+	}*/
 }

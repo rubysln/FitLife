@@ -1,11 +1,7 @@
 package ru.fit.fitlyfe.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -14,29 +10,35 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
+@Table(name = "physical_Activity")
 public class PhysicalActivityData {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "data_id")
 	private Long dataId;
 
-	@NotNull
-	private int steps;
 
-	@NotNull
-	private float distance;
+	@Column(name = "steps")
+	private Integer steps;
 
-	@NotNull
+
+	@Column(name = "distance")
+	private Float distance;
+
+
+	@Column(name = "workout_time")
 	private String workoutTime;
 
-	@NotNull
-	private float caloriesBurned;
+
+	@Column(name = "calories_burned")
+	private Float caloriesBurned;
 
 	@NotNull
-	@NotEmpty
-	@ManyToOne(fetch = FetchType.LAZY)
-	private UserProfile user;
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "user_profile_id")
+	private UserProfile userProfile;
 
 	public PhysicalActivityData(UserProfile userProfile){
-		this.user = userProfile;
+		this.userProfile = userProfile;
 	}
 }
