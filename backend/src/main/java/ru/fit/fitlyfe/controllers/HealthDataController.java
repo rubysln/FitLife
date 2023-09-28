@@ -17,7 +17,7 @@ import ru.fit.fitlyfe.repository.HealthDataRepository;
 import ru.fit.fitlyfe.repository.UserRepository;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/health")
 public class HealthDataController {
 
 	@Autowired
@@ -26,7 +26,7 @@ public class HealthDataController {
 	@Autowired
 	private UserRepository userRepository;
 
-	@GetMapping(value = "/health/{userId}")
+	@GetMapping(value = "/{userId}")
 	List<HealthData> getHealths(@PathVariable("userId") long id) {
 		Optional<UserProfile> userOptional = userRepository.findById(id);
 		if (userOptional.isPresent()) {
@@ -41,7 +41,7 @@ public class HealthDataController {
 		else return null;
 	}
 
-	@GetMapping(value = "/health/{userId}/{healthId}")
+	@GetMapping(value = "/{userId}/{healthId}")
 	Optional<HealthData> getHealth(@PathVariable("userId") long userId, @PathVariable("healthId") long healthId){
 		var userOptional = userRepository.findById(userId);
 		var healthOptional = repository.findById(healthId);
@@ -55,7 +55,7 @@ public class HealthDataController {
 		else return Optional.empty();
 	}
 
-	@PostMapping(value = "/health/{userId}")
+	@PostMapping(value = "/{userId}")
 	HealthData createHealth(@PathVariable("userId") long userId, @RequestBody HealthData healthData){
 		var userOptional = userRepository.findById(userId);
 
@@ -66,12 +66,12 @@ public class HealthDataController {
 		else return null;
 	}
 
-	@DeleteMapping(value = "/health/{healthId}")
+	@DeleteMapping(value = "/{healthId}")
 	void deleteHealth(@PathVariable("healthId") long healthId){
 		repository.deleteById(healthId);
 	}
 
-	@PatchMapping(value = "/health/{healthId}")
+	@PatchMapping(value = "/{healthId}")
 	Optional<HealthData> patchHealth(@PathVariable("healthId") long healthId, @RequestBody HealthData health){
 		return repository.findById(healthId)
 				.map(healthData -> {
