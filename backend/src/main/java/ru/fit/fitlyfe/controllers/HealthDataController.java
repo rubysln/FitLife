@@ -23,7 +23,7 @@ import ru.fit.fitlyfe.models.HealthData;
 import ru.fit.fitlyfe.services.impl.HealthDataServiceImpl;
 
 @RestController
-@RequestMapping("/api/health")
+@RequestMapping("/api/healths")
 public class HealthDataController {
 	@Autowired
 	private HealthDataServiceImpl healthDataService;

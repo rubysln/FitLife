@@ -17,7 +17,7 @@ import ru.fit.fitlyfe.services.impl.UserProfileServiceImpl;
 
 @CrossOrigin(origins = "*", maxAge = 4800)
 @RestController
-@RequestMapping("/api/user/")
+@RequestMapping("/api/users/")
 public class UserController {
 
 	@Autowired

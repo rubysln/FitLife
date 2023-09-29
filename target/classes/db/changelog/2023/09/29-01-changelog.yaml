@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 1695885044766-1
+      id: 1696019479003-1
       author: shtig (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -34,7 +34,7 @@ databaseChangeLog:
                   type: BIGINT
             tableName: health_data
   - changeSet:
-      id: 1695885044766-2
+      id: 1696019479003-2
       author: shtig (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -67,7 +67,7 @@ databaseChangeLog:
                   type: BIGINT
             tableName: physical_activity
   - changeSet:
-      id: 1695885044766-3
+      id: 1696019479003-3
       author: shtig (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -86,28 +86,22 @@ databaseChangeLog:
                   type: VARCHAR(30)
               - column:
                   name: password_hash
-                  type: VARCHAR(32)
+                  type: VARCHAR(255)
               - column:
                   name: email
                   type: VARCHAR(255)
               - column:
-                  constraints:
-                    nullable: false
                   name: height
                   type: FLOAT
               - column:
-                  constraints:
-                    nullable: false
                   name: weight
                   type: FLOAT
               - column:
-                  constraints:
-                    nullable: false
                   name: date
                   type: VARCHAR(255)
             tableName: user_profile
   - changeSet:
-      id: 1695885044766-4
+      id: 1696019479003-4
       author: shtig (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -118,7 +112,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: user_profile
   - changeSet:
-      id: 1695885044766-5
+      id: 1696019479003-5
       author: shtig (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -128,4 +122,3 @@ databaseChangeLog:
             constraintName: FK_PHYSICAL_ACTIVITY_ON_USER_PROFILE
             referencedColumnNames: id
             referencedTableName: user_profile
-

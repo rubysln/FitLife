@@ -1,5 +1,6 @@
 package ru.fit.fitlyfe.services.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.fit.fitlyfe.models.HealthData;
 import ru.fit.fitlyfe.models.UserProfile;
@@ -16,6 +17,7 @@ public class HealthDataServiceImpl implements HealthDataService {
 	private final UserProfileRepository userProfileRepository;
 	private final HealthDataRepository healthDataRepository;
 
+	@Autowired
 	public HealthDataServiceImpl(UserProfileRepository userProfileRepository,
 			HealthDataRepository healthDataRepository) {
 		this.userProfileRepository = userProfileRepository;

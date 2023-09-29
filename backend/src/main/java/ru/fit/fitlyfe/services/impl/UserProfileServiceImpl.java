@@ -1,5 +1,6 @@
 package ru.fit.fitlyfe.services.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.fit.fitlyfe.models.UserProfile;
 import ru.fit.fitlyfe.repository.UserProfileRepository;
@@ -13,6 +14,7 @@ public class UserProfileServiceImpl implements UserProfileService {
 
 	private final UserProfileRepository userProfileRepository;
 
+	@Autowired
 	public UserProfileServiceImpl(UserProfileRepository userProfileRepository) {
 		this.userProfileRepository = userProfileRepository;
 	}

@@ -1,5 +1,6 @@
 package ru.fit.fitlyfe.services.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.fit.fitlyfe.models.PhysicalActivityData;
 import ru.fit.fitlyfe.models.UserProfile;
@@ -18,6 +19,7 @@ public class PhysicalActivityDataServiceImpl implements PhysicalActivityDataServ
 	private final UserProfileRepository userProfileRepository;
 	private final PhysicalActivityDataRepository physicalActivityDataRepository;
 
+	@Autowired
 	public PhysicalActivityDataServiceImpl(UserProfileRepository userProfileRepository,
 			PhysicalActivityDataRepository physicalActivityDataRepository) {
 		this.userProfileRepository = userProfileRepository;
