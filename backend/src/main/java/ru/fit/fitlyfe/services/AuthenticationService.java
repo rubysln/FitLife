@@ -1,5 +1,5 @@
 package ru.fit.fitlyfe.services;
 
-public class AuthenticationService {
+public interface AuthenticationService {
 
 }

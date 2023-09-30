@@ -3,6 +3,7 @@ package ru.fit.fitlyfe.controllers;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +18,7 @@ import ru.fit.fitlyfe.services.impl.UserProfileServiceImpl;
 
 @CrossOrigin(origins = "*", maxAge = 4800)
 @RestController
-@RequestMapping("/api/users/")
+@RequestMapping("/api/users")
 public class UserController {
 
 	@Autowired
@@ -28,12 +29,13 @@ public class UserController {
 		return userProfileService.getOneUser(id);
 	}
 
+
 	@GetMapping
 	List<UserProfile> getAllUsers() {
 		return userProfileService.getAllUsers();
 	}
 
-	@PostMapping()
+	@PostMapping
 	UserProfile createUser(@RequestBody UserProfile userProfile) {
 		return userProfileService.createUser(userProfile);
 	}
