@@ -18,19 +18,16 @@ class JournalActivity : AppCompatActivity() {
                 com.example.fitlife.android.R.id.home -> {
                     val intent = Intent(this, MenuActivity::class.java)
                     startActivity(intent)
-                    menuItem.isChecked = true
                     true // Возвращаем true, чтобы отметить, что событие было обработано
                 }
                 com.example.fitlife.android.R.id.journal -> {
                     val intent = Intent(this, JournalActivity::class.java)
                     startActivity(intent)
-                    menuItem.isChecked = true
                     true
                 }
                 com.example.fitlife.android.R.id.profile -> {
                     val intent = Intent(this, ProfileActivity::class.java)
                     startActivity(intent)
-                    menuItem.isChecked = true
                     true
                 }
                 else -> false

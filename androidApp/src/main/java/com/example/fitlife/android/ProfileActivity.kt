@@ -19,19 +19,16 @@ class ProfileActivity: AppCompatActivity() {
                 R.id.home -> {
                     val intent = Intent(this, MenuActivity::class.java)
                     startActivity(intent)
-                    menuItem.isEnabled = true
                     true // Возвращаем true, чтобы отметить, что событие было обработано
                 }
                 R.id.journal -> {
                     val intent = Intent(this, JournalActivity::class.java)
                     startActivity(intent)
-                    menuItem.isChecked = true
                     true
                 }
                 R.id.profile -> {
                     val intent = Intent(this, ProfileActivity::class.java)
                     startActivity(intent)
-                    menuItem.isChecked = true
                     true
                 }
                 else -> false
