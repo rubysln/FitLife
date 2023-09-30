@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">FitLife</string>
+    <string name="create_acc_text">Создайте аккаунт</string>
+    <string name="input_login_text">Введите логин</string>
+    <string name="input_email_text">Введите email</string>
+    <string name="input_password_text">Введите пароль</string>
+    <string name="registration_account_text">Зарегистрироваться</string>
+    <string name="you_already_have_account_text">Уже есть аккаунт?</string>
+    <string name="login_text">Войти</string>
+    <string name="login_to_account_text">Войдите в аккаунт</string>
+    <string name="you_dont_yet_account_text">Ещё нет аккаунта?</string>
+    <string name="main_page_text">Главная</string>
+    <string name="journal_page_text">Журнал</string>
+    <string name="profile_page_text">Профиль</string>
+    <string name="move_min">Move Min</string>
+    <string name="cal">Cal</string>
+    <string name="km">km</string>
+</resources>
