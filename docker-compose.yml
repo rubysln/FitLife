@@ -6,12 +6,11 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8181:8181"
+      - "8080:8080"
     depends_on:
       service-db:
         condition: service_healthy
     environment:
-      - SERVER_PORT= 8181
       - SPRING_DATASOURCE_URL=jdbc:postgresql://service-db/fitlife
 
   service-db:
