@@ -10,7 +10,6 @@ import ru.fit.fitlyfe.security.RegisterRequest;
 import ru.fit.fitlyfe.services.impl.AuthenticationServiceImpl;
 
 @RestController
-@CrossOrigin(origins = "*", maxAge = 4800)
 @RequestMapping("/api/in")
 @RequiredArgsConstructor
 public class AuthenticationController {

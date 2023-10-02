@@ -16,7 +16,6 @@ import ru.fit.fitlyfe.models.HealthData;
 import ru.fit.fitlyfe.services.impl.HealthDataServiceImpl;
 
 @RestController
-@CrossOrigin(origins = "*", maxAge = 4800)
 @RequestMapping("/api/healths")
 public class HealthDataController {
 	@Autowired
