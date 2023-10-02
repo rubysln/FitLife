@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 *.iml
 .gradle
 .idea
@@ -8,3 +9,6 @@ captures
 .cxx
 local.properties
 xcuserdata
+=======
+.idea/
+>>>>>>> 418f283d97e554d5385bab4d79c077c6618c3e78
