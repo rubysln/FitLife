@@ -3,16 +3,14 @@ package ru.fit.fitlyfe.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.fit.fitlyfe.security.AuthenticationRequest;
 import ru.fit.fitlyfe.security.AuthenticationResponse;
 import ru.fit.fitlyfe.security.RegisterRequest;
 import ru.fit.fitlyfe.services.impl.AuthenticationServiceImpl;
 
 @RestController
+@CrossOrigin(origins = "*", maxAge = 4800)
 @RequestMapping("/api/in")
 @RequiredArgsConstructor
 public class AuthenticationController {
