@@ -1,17 +1,67 @@
 # API Документация FitLife 👩‍💻
 
----
+
 
 # Содержание
 
-#### 1. [UserController](#1-usercontroller-)
-#### 2. [PhysicalActivityDataController](#2-PhysicalActivityDataController-)
-#### 3. [HealthDataController](#3-HealthDataController-)
-#### 4. [AuthenticationController](#4-AuthenticationController-)
+#### 0. [База данных](#database)
+#### 1. [UserController](#user)
+#### 2. [PhysicalActivityDataController](#activity)
+#### 3. [HealthDataController](#health)
+#### 4. [AuthenticationController](#auth)
 
 ---
 
-## 1. UserController 👤
+# <a name="database">База данных 📚</a>
+
+**Используемая база данных**: _PostgreSQL_
+
+## Таблицы
+
+### user_profile:
+
+| Name          | Type           |
+|---------------|----------------|
+| Id            | `bigint `      |
+| user_name     | `varchar(30)`  |
+| password_hash | `varchar(256)` |
+| email         | `varchar(256)` |    
+| height        | `double`       |
+| weight        | `double`       |
+| date          | `date`         |
+
+### health_data:
+
+| Name            | Type                     |
+|-----------------|--------------------------|
+| id              | `bigint`                 |
+| heart_rate      | `int`                    |
+| blood_sugar_lvl | `double`                 |
+| blood_pressure  | `varchar`                |
+| user_profile_id | `fk -> user_profile(id)` |
+
+### physical_activity
+
+| Name            | Type                     |
+|-----------------|--------------------------|
+| id              | `bigint`                 |
+| steps           | `int`                    |
+| distance        | `double`                 |
+| workout_time    | `varchar(256)`           |
+| calories_burned | `double`                 |
+| user_profile_id | `fk -> user_profile(id)` |
+
+## Структура БД
+
+```mermaid
+graph LR
+user_profile -- one to many --> health_data((health_data))
+user_profile -- one to many  --> physical_activity((physical_activity))
+```
+
+---
+
+## 1. <a name="user">UserController 👤</a>
 
 ### 1. Получение одного пользователя
 
@@ -143,9 +193,9 @@
 }
 ````
 
----
 
-## 2. PhysicalActivityDataController 🏃‍♀️
+
+## 2. <a name="activity">PhysicalActivityDataController 🏃‍♀️</a>
 
 ### 1. Получение данных по физической активности
 
@@ -298,8 +348,8 @@ userId и activityId).
 
 > **Примечание**: Этот эндпоинт может вернуть `204 No Content` в случае успешного удаления или 404 Not Found в случае отсутствия
 данных физической активности.
----
-## 3. HealthDataController 💖
+
+## 3. <a name="health">HealthDataController 💖</a>
 
 ### 1. Получение всех данных о здоровье для пользователя
 
@@ -452,8 +502,8 @@ _**URL**_: `/api/healths/{userId}`
 
 > **Примечание**: Этот эндпоинт может вернуть `204 No Content` в случае успешного удаления или 404 Not Found в случае отсутствия
 данных о здоровье.
----
-## 4. AuthenticationController 🔐
+
+## 4. <a name="auth">AuthenticationController 🔐</a>
 
 ### 1. Регистрация пользователя
 
@@ -506,7 +556,7 @@ _**URL**_: `/api/healths/{userId}`
 
 ````
 {
-"token": "JWT-токен",
-"username": "Имя пользователя"
+    "token": "JWT-токен",
+    "username": "Имя пользователя"
 }
 ````
