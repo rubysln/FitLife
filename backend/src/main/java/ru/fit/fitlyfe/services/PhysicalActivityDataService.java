@@ -14,5 +14,5 @@ public interface PhysicalActivityDataService {
 
     Optional<PhysicalActivityData> patchActivity(PhysicalActivityData newPhysicalActivityData, Long userId, Long activityId);
 
-    boolean deleteById(Long activityId);
+    void deleteById(Long activityId);
 }

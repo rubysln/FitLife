@@ -10,8 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.fit.fitlyfe.exceptions.HealthDataBadRequestException;
+import ru.fit.fitlyfe.exceptions.HealthDataNotFoundException;
 import ru.fit.fitlyfe.models.HealthData;
 import ru.fit.fitlyfe.services.impl.HealthDataServiceImpl;
 
@@ -23,8 +26,7 @@ public class HealthDataController {
 
 	@GetMapping("/{userId}")
 	CollectionModel<EntityModel<HealthData>> getHealths(@PathVariable("userId") long userId){
-		var healthsDataList =  healthDataService.getAllHealth(userId);
-		if(healthsDataList == null) return null;
+		var healthsDataList = healthDataService.getAllHealth(userId);
 		List<EntityModel<HealthData>> healthModels = healthsDataList.stream()
 				.map(healthData -> EntityModel.of(healthData,
 						linkTo(methodOn(HealthDataController.class)
@@ -79,6 +81,16 @@ public class HealthDataController {
 		healthDataService.deleteHealth(healthId);
 
 		return ResponseEntity.noContent().build();
+	}
+
+	@ExceptionHandler(HealthDataBadRequestException.class)
+	public ResponseEntity<String> badRequestException(HealthDataBadRequestException exception){
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+	}
+
+	@ExceptionHandler(HealthDataNotFoundException.class)
+	public ResponseEntity<String> notFoundException(HealthDataNotFoundException exception){
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
 	}
 }
 

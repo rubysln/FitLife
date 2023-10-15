@@ -2,17 +2,13 @@ package ru.fit.fitlyfe.controllers;
 
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import ru.fit.fitlyfe.exceptions.UserExceptionBadRequest;
+import ru.fit.fitlyfe.exceptions.UserExceptionNotFound;
 import ru.fit.fitlyfe.models.UserProfile;
 import ru.fit.fitlyfe.services.impl.UserProfileServiceImpl;
 
@@ -21,33 +17,48 @@ import ru.fit.fitlyfe.services.impl.UserProfileServiceImpl;
 @RequestMapping("/api/users")
 public class UserController {
 
-	@Autowired
-	private UserProfileServiceImpl userProfileService;
+    @Autowired
+    private UserProfileServiceImpl userProfileService;
 
-	@GetMapping("/{id}")
-	Optional<UserProfile> getOneUser(@PathVariable("id") Long id) {
-		return userProfileService.getOneUser(id);
-	}
+    @GetMapping("/{id}")
+    ResponseEntity<UserProfile> getOneUser(@PathVariable("id") Long id) {
+        Optional<UserProfile> userProfile = userProfileService.getOneUser(id);
+        return ResponseEntity.ok(userProfile.get());
+    }
 
 
-	@GetMapping
-	List<UserProfile> getAllUsers() {
-		return userProfileService.getAllUsers();
-	}
+    @GetMapping
+    List<UserProfile> getAllUsers() {
+        return userProfileService.getAllUsers();
+    }
 
-	@PostMapping
-	UserProfile createUser(@RequestBody UserProfile userProfile) {
-		return userProfileService.createUser(userProfile);
-	}
+    @PostMapping
+    ResponseEntity<UserProfile> createUser(@RequestBody UserProfile userProfile) {
+        var user = userProfileService.createUser(userProfile);
+        return ResponseEntity.ok(user);
+    }
 
-	@DeleteMapping("/{id}")
-	void deleteUser(@PathVariable("id") Long id) {
-		userProfileService.deleteUser(id);
-	}
+    @DeleteMapping("/{id}")
+    ResponseEntity<String> deleteUser(@PathVariable("id") Long id) {
+        var user = userProfileService.getOneUser(id);
+        userProfileService.deleteUser(id);
+        return ResponseEntity.ok("Пользователь с Id: " + id + " удалён!");
+    }
 
-	@PatchMapping("/{id}")
-	Optional<UserProfile> patchUser(@PathVariable("id") Long id,
-			@RequestBody UserProfile userProfile) {
-		return userProfileService.patchUser(id, userProfile);
-	}
+    @PatchMapping("/{id}")
+    ResponseEntity<UserProfile> patchUser(@PathVariable("id") Long id,
+                                     @RequestBody UserProfile userProfile) {
+        var user = userProfileService.getOneUser(id);
+        return ResponseEntity.ok(userProfileService.patchUser(id, userProfile).get());
+    }
+
+    @ExceptionHandler(UserExceptionNotFound.class)
+    public ResponseEntity<String> notFoundException(UserExceptionNotFound exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+    }
+
+    @ExceptionHandler(UserExceptionBadRequest.class)
+    public ResponseEntity<String> badRequestException(UserExceptionBadRequest exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+    }
 }

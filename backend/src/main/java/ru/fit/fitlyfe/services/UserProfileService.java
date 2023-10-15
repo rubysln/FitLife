@@ -1,12 +1,13 @@
 package ru.fit.fitlyfe.services;
 
+import ru.fit.fitlyfe.exceptions.UserExceptionNotFound;
 import ru.fit.fitlyfe.models.UserProfile;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface UserProfileService {
-    Optional<UserProfile> getOneUser(Long id);
+    Optional<UserProfile> getOneUser(Long id) throws UserExceptionNotFound;
 
     List<UserProfile> getAllUsers();
 
