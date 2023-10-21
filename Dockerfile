@@ -1,16 +1,17 @@
-FROM maven:3.8.4-openjdk-17-slim AS builder
+FROM maven:3.8-openjdk-17-slim AS builder
 
 WORKDIR /app
 
-COPY ./backend/src ./src
+COPY ./backend/src ./backend/src
 COPY ./pom.xml .
 
-RUN mvn clean package -Dmaven.test.skip=true
+RUN mvn clean package
 
-FROM openjdk:17-jdk-slim
+RUN cp target/FitLyfe-0.0.1-SNAPSHOT.jar app.jar
 
-WORKDIR /app
+RUN rm -rf target
+RUN rm -rf ~/.m2
 
-COPY --from=builder /app/target/FitLyfe-0.0.1-SNAPSHOT.jar app.jar
+ENV JAVA_OPTS=""
 
 CMD ["java", "-jar", "app.jar"]
