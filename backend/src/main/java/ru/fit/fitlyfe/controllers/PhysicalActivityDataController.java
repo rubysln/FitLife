@@ -7,6 +7,8 @@ import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.fit.fitlyfe.exceptions.ApiError;
+import ru.fit.fitlyfe.exceptions.ErrorResponse;
 import ru.fit.fitlyfe.exceptions.PhysicalActivityDataBadRequestException;
 import ru.fit.fitlyfe.exceptions.PhysicalActivityDataNotFoundException;
 import ru.fit.fitlyfe.models.PhysicalActivityData;
@@ -91,12 +93,14 @@ public class PhysicalActivityDataController {
     }
 
     @ExceptionHandler(PhysicalActivityDataBadRequestException.class)
-    public ResponseEntity<String> badRequestException(PhysicalActivityDataBadRequestException exception){
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+    public ResponseEntity<ErrorResponse> badRequestException(PhysicalActivityDataBadRequestException exception){
+        ApiError error = new ApiError(exception.getMessage(), HttpStatus.BAD_REQUEST.name());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(error));
     }
 
     @ExceptionHandler(PhysicalActivityDataNotFoundException.class)
-    public ResponseEntity<String> notFoundException(PhysicalActivityDataNotFoundException exception){
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+    public ResponseEntity<ErrorResponse> notFoundException(PhysicalActivityDataNotFoundException exception){
+        ApiError error = new ApiError(exception.getMessage(), HttpStatus.NOT_EXTENDED.name());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(error));
     }
 }

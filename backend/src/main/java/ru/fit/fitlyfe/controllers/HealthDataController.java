@@ -13,6 +13,8 @@ import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.fit.fitlyfe.exceptions.ApiError;
+import ru.fit.fitlyfe.exceptions.ErrorResponse;
 import ru.fit.fitlyfe.exceptions.HealthDataBadRequestException;
 import ru.fit.fitlyfe.exceptions.HealthDataNotFoundException;
 import ru.fit.fitlyfe.models.HealthData;
@@ -84,13 +86,15 @@ public class HealthDataController {
 	}
 
 	@ExceptionHandler(HealthDataBadRequestException.class)
-	public ResponseEntity<String> badRequestException(HealthDataBadRequestException exception){
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+	public ResponseEntity<ErrorResponse> badRequestException(HealthDataBadRequestException exception){
+		ApiError error = new ApiError(exception.getMessage(), HttpStatus.BAD_REQUEST.name());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(error));
 	}
 
 	@ExceptionHandler(HealthDataNotFoundException.class)
-	public ResponseEntity<String> notFoundException(HealthDataNotFoundException exception){
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+	public ResponseEntity<ErrorResponse> notFoundException(HealthDataNotFoundException exception){
+		ApiError error = new ApiError(exception.getMessage(), HttpStatus.NOT_FOUND.name());
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(error));
 	}
 }
 

@@ -3,10 +3,13 @@ package ru.fit.fitlyfe.controllers;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.catalina.core.AprStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.fit.fitlyfe.exceptions.ApiError;
+import ru.fit.fitlyfe.exceptions.ErrorResponse;
 import ru.fit.fitlyfe.exceptions.UserExceptionBadRequest;
 import ru.fit.fitlyfe.exceptions.UserExceptionNotFound;
 import ru.fit.fitlyfe.models.UserProfile;
@@ -53,12 +56,14 @@ public class UserController {
     }
 
     @ExceptionHandler(UserExceptionNotFound.class)
-    public ResponseEntity<String> notFoundException(UserExceptionNotFound exception) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+    public ResponseEntity<ErrorResponse> notFoundException(UserExceptionNotFound exception) {
+        ApiError error = new ApiError(exception.getMessage(), HttpStatus.NOT_FOUND.name());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(error));
     }
 
     @ExceptionHandler(UserExceptionBadRequest.class)
-    public ResponseEntity<String> badRequestException(UserExceptionBadRequest exception) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+    public ResponseEntity<ErrorResponse> badRequestException(UserExceptionBadRequest exception) {
+        ApiError error = new ApiError(exception.getMessage(), HttpStatus.BAD_REQUEST.name());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(error));
     }
 }
